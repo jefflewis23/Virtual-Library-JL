@@ -8,19 +8,17 @@ public class LibraryTest {
     static Library library = new Library();
     
     public static void printMenu() {
+        // Maybe switch around the menu layout
         System.out.println("Possible actions:");
         System.out.println("0 - Quit");
         System.out.println("1 - Create new Account");
-        // We actually don't want to make the user create any books, we want to have a collection of books that the user
-        // can then check out. We can use ask them to enter the title or the id of the book they want, and then iterate over
-        // the books arraylist to find it and then add it to the user's checked out books arraylist, then remove it from
-        // the library books list
-        System.out.println("2 - Print all Accounts");
-        System.out.println("3 - Print all Books in the catalog");
-        System.out.println("4 - Print all Books currently available");
-        System.out.println("5 - Print all Books checked out by an Account");
-        System.out.println("6 - Check out a Book to an Account");
-        System.out.println("7 - Return a book");
+        System.out.println("2 - Remove an Account");
+        System.out.println("3 - Check out a Book to an Account");
+        System.out.println("4 - Return a book");
+        System.out.println("5 - Print all Books in the catalog");
+        System.out.println("6 - Print all Books currently available");
+        System.out.println("7 - Print all Books checked out by an Account");
+        System.out.println("8 - Print all Accounts");
     }
     
     public static void performAction(int choice) {
@@ -33,6 +31,7 @@ public class LibraryTest {
             quit = true;
             break;
         case 1:
+            // Create new Account
             System.out.println("Please enter first name");
             String first = scan.next();
             System.out.println("Please enter last name");
@@ -47,38 +46,27 @@ public class LibraryTest {
             String phone = scan.next();
             System.out.println("Please enter an account number");
             accountNumber = scan.nextInt();
-            account = library.findAccount(accountNumber);
-            if (account != null) {
-                // Concatenates the first and last name. nextLine() is weird and can cause issues so this is the easiest way to read first and last name
-                String name = first + " " + last;
-                Account newAccount = new Account(new Members(name, address, phone), accountNumber);
-                library.addAccount(newAccount);
-            } else System.out.println("Account number already taken. Please try again.");
+            // Concatenates the first and last name. nextLine() is weird and can cause issues so this is the easiest way to read first and last name
+            String name = first + " " + last;
+            Account newAccount = new Account(new Members(name, address, phone), accountNumber);
+            library.addAccount(newAccount);
+ 
             break;
         case 2:
-            library.printAccountInfo();
-            break;
-        case 3:
-            // Print all books in the catalog 
-            library.printCatalog();
-            break;
-        case 4: 
-            // Print all books currently available (all books in the books array (since books are removed when checked out)
-            library.printAvailableBooks();
-            break;
-        case 5:
-            // Print all books checked out by an Account
+            // Remove an account (return all books checked out to the library first)
             System.out.println("Please select an account by account number ONLY:");
             library.printAccounts();
             accountNumber = scan.nextInt();
             account = library.findAccount(accountNumber);
-            // If the account was found, call the printBooks method
             if (account != null) {
-                System.out.println("Books checked out by " + account.accountHolder.name + ":");
-                library.printBooks(account);
-            } else System.out.println("Operation unsuccessful");
+                if (account.numBooksWithdrawn != 0) {
+                    System.out.println("Please return all books before removing this account.");
+                } else {
+                    library.removeAccount(account);
+                }
+            }
             break;
-        case 6:
+        case 3:
             // Check out a Book to an Account
             System.out.println("Please select an account by account number ONLY:");
             library.printAccounts();
@@ -95,8 +83,9 @@ public class LibraryTest {
             }
 
             break;
-        case 7:
-            // Return a book from an account
+        case 4: 
+         // Return a book from an account
+            // ****Weird behavior going on here: not showing the correct book IDs when printing list of books. They are stored correctly in the array but not printing correctly
             System.out.println("Please select an account by account number ONLY:");
             library.printAccounts();
             accountNumber = scan.nextInt();
@@ -114,6 +103,34 @@ public class LibraryTest {
                     } else System.out.println("Operation unsuccessful");
                 } else System.out.println("This account does not have any books checked out.");
             }
+            break;
+
+        case 5:
+            // Print all books in the catalog 
+            library.printCatalog();
+            break;
+        case 6:
+            // Print all books currently available (all books in the books array (since books are removed when checked out)
+            library.printAvailableBooks();
+            break;
+
+        case 7:
+            // Print all books checked out by an Account
+            System.out.println("Please select an account by account number ONLY:");
+            library.printAccounts();
+            accountNumber = scan.nextInt();
+            account = library.findAccount(accountNumber);
+            // If the account was found, call the printBooks method
+            if (account != null) {
+                System.out.println("Books checked out by " + account.accountHolder.name + ":");
+                library.printBooks(account);
+            } else System.out.println("Operation unsuccessful");
+            break;
+            
+            
+        case 8: 
+            // Print all accounts
+            library.printAccountInfo();
             break;
         default:
             System.out.println("Unknown option. Try again");
@@ -133,6 +150,12 @@ public class LibraryTest {
         Book book8 = new Book(8, "The Catcher in the Rye", "J. D. Salinger");
         Book book9 = new Book(9, "The Great Gatsby", "F. Scott Fitzgerald");
         Book book10 = new Book(10, "Divergent", "Veronica Roth");
+        Book book11 = new Book(11, "The Lord of the Rings", "J. R. R. Tolkien");
+        Book book12 = new Book(12, "1984", "George Orwell");
+        Book book13 = new Book(13, "To Kill a Mockingbird", "Harper Lee");
+        Book book14 = new Book(14, "Catch-22", "Joseph Heller");
+        Book book15 = new Book(15, "Divergent", "Veronica Roth");
+        
         
         library.addBook(book1);
         library.addBook(book2);
@@ -144,9 +167,15 @@ public class LibraryTest {
         library.addBook(book8);
         library.addBook(book9);
         library.addBook(book10);
+        library.addBook(book11);
+        library.addBook(book12);
+        library.addBook(book13);
+        library.addBook(book14);
+        library.addBook(book15);
         
-        Account account1 = new Account(new Members("Becca", "123 E Sample Street", "3171234567"), 0);
-        Account account2 = new Account(new Members("Jeff", "100 Apple Ln", "123-456-7890"), 1);
+        // ******* For testing purposes: Remove before submission ********
+        Account account1 = new Account(new Members("Bob Smith", "123 E Sample Street", "3171234567"), 1);
+        Account account2 = new Account(new Members("Joe Brown", "100 Apple Ln", "123-456-7890"), 2);
         library.addAccount(account1);
         library.addAccount(account2);
         

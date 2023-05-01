@@ -20,8 +20,9 @@ public class Account {
 
 
     //Non-default Constructor
-    public Account (Members accountName, int newAccountNumber) {
-        this.accountHolder = accountName;
+    public Account (Members accountHolder, int newAccountNumber) {
+   
+        this.accountHolder = accountHolder;
         this.accountNumber = newAccountNumber;
         this.numBooksWithdrawn = 0;
         this.checkedOutBooks = new ArrayList<Book>();

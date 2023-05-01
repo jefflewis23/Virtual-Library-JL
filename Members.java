@@ -19,7 +19,6 @@ public class Members {
         name = accountName;
         memberAddress = address;
         phone = phoneNumber;
-
     }
 
     //Set Methods

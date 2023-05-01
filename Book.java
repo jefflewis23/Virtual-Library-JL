@@ -17,7 +17,8 @@ public class Book {
         bookID = 0;
         title = "";
         author = "";
-        available = true;       
+        available = true;      
+ 
     }
     /* ****** UPDATE AS NEW ATTRIBUTES ARE ADDED ****** */
     public Book(int bookID, String title, String author) {
