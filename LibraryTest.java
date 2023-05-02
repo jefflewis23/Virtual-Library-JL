@@ -173,11 +173,6 @@ public class LibraryTest {
         library.addBook(book14);
         library.addBook(book15);
         
-        // ******* For testing purposes: Remove before submission ********
-        Account account1 = new Account(new Members("Bob Smith", "123 E Sample Street", "3171234567"), 1);
-        Account account2 = new Account(new Members("Joe Brown", "100 Apple Ln", "123-456-7890"), 2);
-        library.addAccount(account1);
-        library.addAccount(account2);
         
         int choice;
         

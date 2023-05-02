@@ -83,7 +83,7 @@ public class Library {
     public void printCatalog() {
         System.out.println("All books currently owned by this library:");
         for (int i = 0; i < books.size(); i++) {
-            System.out.println(books.get(i).title + " by " + books.get(i).author);
+            System.out.println("Book ID: " + books.get(i).bookID + " | " + books.get(i).title + " by " + books.get(i).author);
         }
     }
     public void printAvailableBooks() {
